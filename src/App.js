@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { countries } from "./mockdata/constants";
 
 function App() {
+  const [country, setCountry] = useState("");
+  console.log(countries);
+  console.log(country);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <select onChange={(e) => setCountry(e.target.value)}>
+        {countries.map((item, index) => {
+          return (
+            <option value={index} key={index}>
+              {item.name}
+            </option>
+          );
+        })}
+      </select>
+
+      <select>
+        {countries[country]?.cities?.map((item, index) => {
+          return <option key={index}>{item}</option>;
+        })}
+      </select>
     </div>
   );
 }
