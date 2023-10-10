@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { countries } from "./mockdata/constants";
+import { useEffect, useState } from "react";
+import useFetch from "./hooks/useFetch";
 
 function App() {
-  const [country, setCountry] = useState("");
-  console.log(countries);
-  console.log(country);
+  const [flag, setFlag] = useState(false);
+  const inURL = "https://api.coindesk.com/v1/bpi/currentprice.json";
+
+  const data = useFetch(inURL, flag);
+
+  useEffect(() => {
+    let timer = setInterval(() => {
+      console.log("Called Interval");
+      setFlag(!flag);
+    }, 60000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [flag]);
+
+  console.log(data?.bpi?.USD?.rate);
   return (
     <div>
-      <select onChange={(e) => setCountry(e.target.value)}>
-        {countries.map((item, index) => {
-          return (
-            <option value={index} key={index}>
-              {item.name}
-            </option>
-          );
-        })}
-      </select>
-
-      <select>
-        {countries[country]?.cities?.map((item, index) => {
-          return <option key={index}>{item}</option>;
-        })}
-      </select>
+      <h1>{data?.bpi?.USD?.description}</h1>
+      <h1>{data?.bpi?.USD?.rate}</h1>
     </div>
   );
 }
